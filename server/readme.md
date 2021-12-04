@@ -10,6 +10,6 @@
 - 3) Выполните команду в терминале ```docker-compose up -d```
 - 4) Сборка готова!
 
-## Images
+## Images:
 - 1) Image контейнера multifora-flask, который принимает запросы клиента и передает их multifora-worker для выполнения таски, находится по [ссылке](https://hub.docker.com/repository/docker/fastrus1804/multifora-flask).
 - 2) Image контейнера multifora-worker, который выполняет таски из multifora-flask. (Например, добавление модели, обучения модели, и т.д.), находится по [ссылке](https://hub.docker.com/repository/docker/fastrus1804/multifora-worker).
