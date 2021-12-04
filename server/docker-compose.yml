@@ -1,0 +1,52 @@
+version: '2'
+
+services:
+  redis:
+    image: redis
+  mongodb:
+    image: mongo:4.0.8
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: mlapi
+      MONGODB_DATA_DIR: /data/db
+    volumes:
+      - ./DBMongo:/data/db
+  multifora-flask:
+    image: fastrus1804/multifora-flask
+    container_name: multifora_flask
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      TZ: Europe/Moscow
+      MONGO_DB_ADDR: mongodb
+      MONGO_DB_PORT: 27017
+      CELERY_BROKER: redis://redis:6379/0
+      CELERY_BACKEND: redis://redis:6379/0
+      DEBUG: "False"
+      PORT: 5000
+      HOST: "0.0.0.0"
+    links:
+      - redis
+    depends_on:
+      - redis
+      - mongodb
+  multifora_worker:
+    image: fastrus1804/multifora-worker
+    container_name: multifora_worker
+    restart: always
+    user: nobody
+    environment:
+      TZ: Europe/Moscow
+      MONGO_DB_ADDR: mongodb
+      MONGO_DB_PORT: 27017
+      CELERY_BROKER: redis://redis:6379/0
+      CELERY_BACKEND: redis://redis:6379/0
+    links:
+      - redis
+    depends_on:
+      - redis
+      - mongodb
